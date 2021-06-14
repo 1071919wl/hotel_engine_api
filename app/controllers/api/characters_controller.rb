@@ -1,10 +1,13 @@
 # API source: https://breakingbadapi.com/documentation
 
-
 class Api::CharactersController < ApplicationController
 
     def index
         @responses = HTTParty.get('https://www.breakingbadapi.com/api/characters/')
+
+        # uri = URI.parse(@responses)
+        # params = CGI.parse(uri.query)
+        # p params
 
         if @responses.length > 0
             render json: @responses.parsed_response
@@ -17,14 +20,17 @@ class Api::CharactersController < ApplicationController
     def show
         url = "https://www.breakingbadapi.com/api/characters/#{params[:id]}"
 
-        @response = Character.find_by(id: params[:id])
+        name = params[:name];
+        p params
+
+        @response = Character.find_by(id: params[:id]) 
         
         if @response
             render json: @response
         else
-            
+            p "HITTTTT!@@@@@@@@"
             @get_response = HTTParty.get(url)
-            p @get_response
+            # p @get_response
             if @get_response[0] != nil && @get_response.length > 0
                 
                 render json: @get_response[0]
